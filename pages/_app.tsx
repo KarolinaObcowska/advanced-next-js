@@ -3,11 +3,12 @@
 import 'reflect-metadata'
 import React from 'react'
 import '../styles/globals.css'
-import { Provider } from 'next-auth/client'
+import { Provider  } from 'next-auth/client'
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps: {session, ...pageProps} }) {
   return (
-    <Provider session={pageProps} >
+  // auth provider
+    <Provider session={session}>
       <Component {...pageProps} />
     </Provider>
   )

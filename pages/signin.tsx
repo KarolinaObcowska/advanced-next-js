@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 
 const Signin = () => {
   const [session, loading] = useSession()
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
     if (session) {
