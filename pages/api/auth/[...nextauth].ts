@@ -17,6 +17,6 @@ export default (req, res: NextApiResponse) => NextAuth(req, res, {
     ],
     database: process.env.DATABASE_URL,
     pages: {
-        signIn: '/signIn'
+        signIn: '/signin'
     }
 })
