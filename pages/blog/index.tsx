@@ -27,24 +27,26 @@ const Blog = ({ posts }) => {
     </Pane>
   )
 }
-export function getStaticProps(ctx) {
-  const cmsPosts = (ctx.preview ? postsFromCMS.draft : postsFromCMS.published).map(post => {
-    const { data } = matter(post)
-    return data;
+export async function getStaticProps(ctx) {
+  const postsDirectory = path.join(process.cwd(), 'posts')
+  const filenames = fs.readdirSync(postsDirectory)
+  // check that preview boolean
+  const cmsPosts = ctx.preview ? postsFromCMS.draft : postsFromCMS.published
+  const filePosts = filenames.map((filename) => {
+    const filePath = path.join(postsDirectory, filename)
+    return fs.readFileSync(filePath, 'utf8')
   })
-  const postsPath = path.join(process.cwd(), 'posts' )
-  const fileNames = fs.readdirSync(postsPath);
-  const filePosts = fileNames.map(name => {
-    const fullPath = path.join(process.cwd(), 'posts', name)
-    const file = fs.readFileSync(fullPath, 'utf-8');
-    const { data } = matter(file)
-    return data;
-  })
+  
+  const posts = orderby(
+    [...cmsPosts, ...filePosts].map((content) => {
+      const { data } = matter(content)
+      return data
+    }),
+    ['publishedOn'],
+    ['desc'],
+  )
 
-  const posts = [...cmsPosts, ...filePosts];
-  return {
-    props: { posts }
-  }
+  return { props: { posts } }
 }
 
 export default Blog

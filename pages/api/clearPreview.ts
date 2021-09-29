@@ -1,6 +1,6 @@
-import { NextApiResponse } from "next"
-
-export default(req, res: NextApiResponse) => {
+export default function handler(req, res) {
+    // clears the preview cookie
     res.clearPreviewData()
-    res.end('previewed mode disabled')
-}
+    res.end('preview disabled')
+  }
+  

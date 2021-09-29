@@ -36,11 +36,8 @@ const Home: FC<{ content: { hero: any; features: any[] } }> = ({ content }) => {
 }
 
 export function getStaticProps(ctx) {
-  return { 
-    props: {
-      content: ctx.preview ? home.draft : home.published
-    }
-  }
+  const content = ctx.preview ? home.draft : home.published
+  return { props: { content } }
 }
 
 export default Home

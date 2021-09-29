@@ -9,6 +9,7 @@ import FolderPane from '../../components/folderPane'
 import DocPane from '../../components/docPane'
 import NewFolderDialog from '../../components/newFolderDialog'
 import { getSession, useSession } from 'next-auth/client'
+import { connectToDB, folder, doc } from '../../db'
 
 const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs?: any[] }> = ({
   folders,
@@ -61,7 +62,7 @@ const App: FC<{ folders?: any[]; activeFolder?: any; activeDoc?: any; activeDocs
           <NewFolderButton onClick={() => setIsShown(true)} />
         </Pane>
         <Pane>
-          <FolderList folders={[{_id: 1, name:'hello'}]} />{' '}
+          <FolderList folders={[{_id: 1, name:'hello'}, ...folders]} />{' '}
         </Pane>
       </Pane>
       <Pane marginLeft={300} width="calc(100vw - 300px)" height="100vh" overflowY="auto" position="relative">
@@ -77,13 +78,35 @@ App.defaultProps = {
   folders: [],
 }
 
-export async function getServerSideProps(ctx) {
-  const session = await getSession(ctx)
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
+  // not signed in
+  if (!session || !session.user) {
+    return { props: {} }
+  }
+
+  const props: any = { session }
+  const { db } = await connectToDB()
+  const folders = await folder.getFolders(db, session.user.id)
+  props.folders = folders
+
+  if (context.params.id) {
+    const activeFolder = folders.find((f) => f._id === context.params.id[0])
+    const activeDocs = await doc.getDocsByFolder(db, activeFolder._id)
+    props.activeFolder = activeFolder
+    props.activeDocs = activeDocs
+
+    const activeDocId = context.params.id[1]
+
+    if (activeDocId) {
+      props.activeDoc = await doc.getOneDoc(db, activeDocId)
+    }
+  }
+
   return {
-      props: {session}
+    props,
   }
 }
-
 /**
  * Catch all handler. Must handle all different page
  * states.

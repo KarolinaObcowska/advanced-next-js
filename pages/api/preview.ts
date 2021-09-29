@@ -1,6 +1,8 @@
-import { NextApiResponse } from "next"
+import { NextApiResponse } from 'next'
 
-export default(req, res: NextApiResponse) => {
-    res.setPreviewData({})
-    res.redirect(req.query.route)
+export default function handler(req, res: NextApiResponse) {
+  // sets the preview cookie
+  res.setPreviewData({})
+  // redirects to the page you want to preview
+  res.redirect(req.query.route)
 }

@@ -5,10 +5,10 @@ import React from 'react'
 import '../styles/globals.css'
 import { Provider  } from 'next-auth/client'
 
-function MyApp({ Component, pageProps: {session, ...pageProps} }) {
+function MyApp({ Component, pageProps }) {
   return (
   // auth provider
-    <Provider session={session}>
+    <Provider session={pageProps.session}>
       <Component {...pageProps} />
     </Provider>
   )
