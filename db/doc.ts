@@ -1,4 +1,3 @@
-// eslint-disable-next-line react/no-unused-prop-types
 import { Db } from 'mongodb'
 import { nanoid } from 'nanoid'
 
@@ -14,7 +13,7 @@ export const createDoc = async (db: Db, doc: { createdBy: string; folder: string
   return db
     .collection('docs')
     .insertOne({
-      _id: nanoid(12),
+      _id: nanoid(),
       ...doc,
       createdAt: new Date().toDateString(),
     })

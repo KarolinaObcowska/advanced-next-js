@@ -5,7 +5,7 @@ export const createFolder = async (db: Db, folder: { createdBy: string; name: st
   return db
     .collection('folders')
     .insertOne({
-      _id: nanoid(12),
+      _id: nanoid(),
       ...folder,
       createdAt: new Date().toDateString(),
     })

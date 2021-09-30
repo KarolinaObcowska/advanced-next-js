@@ -1,12 +1,11 @@
 /* eslint-disable react/no-unused-prop-types */
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import { connectToDB } from '../../../db'
+import { connectToDB, folder, doc } from '../../../db'
 
 export default (req, res) =>
   NextAuth(req, res, {
     session: {
-        // use JWTs instead
       jwt: true,
     },
     jwt: {
@@ -19,20 +18,20 @@ export default (req, res) =>
       }),
       // ...add more providers here
     ],
-
     database: process.env.DATABASE_URL,
     pages: {
       signIn: '/signin',
     },
     callbacks: {
-      async session(session, user) {
+      async session(session, user ) {
         session.user.id = user.id
+        console.log(session.user.id)
         return session
       },
       async jwt(tokenPayload, user, account, profile, isNewUser) {
         const { db } = await connectToDB()
-    
         if (isNewUser) {
+          console.log(isNewUser)
           const personalFolder = await folder.createFolder(db, { createdBy: `${user.id}`, name: 'Getting Started' })
           await doc.createDoc(db, {
             name: 'Start Here',

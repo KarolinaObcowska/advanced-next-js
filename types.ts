@@ -13,8 +13,8 @@ export interface Post {
 }
 
 export interface UserSession {
-  id: string
   image: string
+  id: string
   email: string
   name: string
 }

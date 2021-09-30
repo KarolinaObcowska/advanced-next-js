@@ -30,6 +30,8 @@
     "react/prefer-stateless-function": "off",
     "no-unused-vars": "warn",
     "unicorn/no-null": "off",
+    "eslint-disable-next-line react/no-unused-prop-types",
+
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
